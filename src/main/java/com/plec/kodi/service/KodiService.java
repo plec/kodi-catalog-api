@@ -1,5 +1,6 @@
 package com.plec.kodi.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -11,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,9 @@ import com.plec.kodi.repository.MovieRepository;
 
 @Service
 public class KodiService {
+
+	private static final String PATTERN_START_IMAGE = "preview=\"";
+	private static final String PATTERN_END_IMAGE = "\">";
 
 	private MovieRepository movieRepository;
 
@@ -78,10 +83,17 @@ public class KodiService {
 	}
 	
 	private Movie convert(MovieEntity me) {
-		return new Movie(me.getTitle(), me.getResume(), me.getImage(), me.getGenre(), me.getOriginal_title());
+		return new Movie(me.getTitle(), me.getResume(), extractImageUrl(me.getImage()), Arrays.stream(me.getGenre().split("/")).map(s -> s.trim()).collect(Collectors.toList()), me.getOriginal_title());
 	}
 	private Genre convert(GenreEntity ge) {
 		return new Genre(ge.getId(), ge.getValue());
+	}
+	
+	private String extractImageUrl(String xmlImage) {
+		int startFirstImageUrl = StringUtils.indexOf(xmlImage, PATTERN_START_IMAGE);
+		int endFirstImageUrl = StringUtils.indexOf(xmlImage, PATTERN_END_IMAGE);
+		int startIndex = startFirstImageUrl + PATTERN_START_IMAGE.length();
+		return new String(StringUtils.substring(xmlImage, startIndex, endFirstImageUrl));
 	}
 	
 }

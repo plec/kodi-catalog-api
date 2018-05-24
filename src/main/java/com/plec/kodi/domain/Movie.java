@@ -1,14 +1,16 @@
 package com.plec.kodi.domain;
 
+import java.util.List;
+
 public class Movie {
 
 	public String titre;
 	public String resume;
 	public String image;
-	public String tags;
+	public List<String> tags;
 	public String titre_original;
 
-	public Movie(String titre, String resume, String image, String tags, String titre_original) {
+	public Movie(String titre, String resume, String image, List<String> tags, String titre_original) {
 		super();
 		this.titre = titre;
 		this.resume = resume;
@@ -34,17 +36,17 @@ public class Movie {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	public String getTags() {
-		return tags;
-	}
-	public void setTags(String tags) {
-		this.tags = tags;
-	}
 	public String getTitre_original() {
 		return titre_original;
 	}
 	public void setTitre_original(String titre_original) {
 		this.titre_original = titre_original;
+	}
+	public List<String> getTags() {
+		return tags;
+	}
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
 	
 }
