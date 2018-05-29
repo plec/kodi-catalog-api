@@ -15,15 +15,15 @@
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="org.springframework.jdbc" level="debug" additivity="false">
+    <logger name="org.springframework.jdbc" level="info" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
  
-    <logger name="com.plec" level="debug" additivity="false">
+    <logger name="com.plec" level="info" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
  
-    <root level="error">
+    <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>
  

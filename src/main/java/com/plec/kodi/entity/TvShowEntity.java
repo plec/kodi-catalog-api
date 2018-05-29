@@ -5,16 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity(name="MovieEntity")
-@Table(name="movie")
-public class MovieEntity extends KodiEntity {
+@Entity(name="TvShowEntity")
+@Table(name="tvshow")
+public class TvShowEntity extends KodiEntity {
 
 	@Id
-	@Column(name="idMovie")
-	private long idMovie;
-
-	@Column(name="idFile")
-	private long idFile;
+	@Column(name="idShow")
+	private long idShow;
 
 	@Column(name="c00")
 	private String title;
@@ -22,21 +19,21 @@ public class MovieEntity extends KodiEntity {
 	@Column(name="c01")
 	private String resume;
 
-	@Column(name="c08")
+	@Column(name="c06")
 	private String image;
 
-	@Column(name="c14")
+	@Column(name="c08")
 	private String genre;
 
-	@Column(name="c16")
+	@Column(name="c09")
 	private String original_title;
 
-	public long getIdFile() {
-		return idFile;
+	public long getIdShow() {
+		return idShow;
 	}
 
-	public void setIdFile(long idFile) {
-		this.idFile = idFile;
+	public void setIdShow(long idShow) {
+		this.idShow = idShow;
 	}
 
 	public String getTitle() {
@@ -63,7 +60,6 @@ public class MovieEntity extends KodiEntity {
 		this.image = image;
 	}
 
-
 	public String getGenre() {
 		return genre;
 	}
@@ -81,7 +77,6 @@ public class MovieEntity extends KodiEntity {
 	}
 	
 	 public String toString(){
-	        return idFile+" | " + title;
+	        return idShow + " | " + title;
 	    }
-
 }
