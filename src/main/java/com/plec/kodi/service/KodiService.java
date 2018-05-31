@@ -48,8 +48,6 @@ public class KodiService {
 
 	private TvShowRepository tvShowRepository;
 
-	@Autowired
-	private EntityManager entityManager;
 
 	@Autowired
 	public KodiService(MovieRepository movieRepository, GenreRepository genreRepository, TvShowRepository tvShowRepository) {
