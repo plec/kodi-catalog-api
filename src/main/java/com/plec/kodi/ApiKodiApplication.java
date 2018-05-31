@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 
-@EnableJpaRepositories("com.plec.kodi.repository")
+@EnableJpaRepositories(basePackages = "com.plec.kodi.repository")
 @EntityScan("com.plec.kodi.entity")
 public class ApiKodiApplication {
 

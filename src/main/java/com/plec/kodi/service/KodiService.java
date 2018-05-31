@@ -82,29 +82,30 @@ public class KodiService {
 				throw new RuntimeException("MediaType " + mediaType + "is not supported");
 		}
 	}
-
+	
 	public List<KodiMedia> getPaginatedMovie(int offset, int limit) {
+		return movieRepository.getMedia(offset, limit).stream().map(e -> convert(e))
+				.collect(Collectors.toList());
+		/*
 		final EntityManagerFactory entityManagerFactory = entityManager.getEntityManagerFactory();
 		final CriteriaBuilder criteriaBuilder = entityManagerFactory.getCriteriaBuilder();
+		
 		CriteriaQuery<MovieEntity> criteriaQuery = criteriaBuilder.createQuery(MovieEntity.class);
 		Root<MovieEntity> from = criteriaQuery.from(MovieEntity.class);
 		CriteriaQuery<MovieEntity> select = criteriaQuery.select(from);
+		
+		
+		
+		select.orderBy(criteriaBuilder.asc(from.get("title")));
 		TypedQuery<MovieEntity> typedQuery = entityManager.createQuery(select);
 		typedQuery.setFirstResult(offset);
 		typedQuery.setMaxResults(limit);
 		return typedQuery.getResultList().stream().map(e -> convert(e))
-				.collect(Collectors.toList());
+				.collect(Collectors.toList());*/
 	}
+	
 	public List<KodiMedia> getPaginatedTvShow(int offset, int limit) {
-		final EntityManagerFactory entityManagerFactory = entityManager.getEntityManagerFactory();
-		final CriteriaBuilder criteriaBuilder = entityManagerFactory.getCriteriaBuilder();
-		CriteriaQuery<TvShowEntity> criteriaQuery = criteriaBuilder.createQuery(TvShowEntity.class);
-		Root<TvShowEntity> from = criteriaQuery.from(TvShowEntity.class);
-		CriteriaQuery<TvShowEntity> select = criteriaQuery.select(from);
-		TypedQuery<TvShowEntity> typedQuery = entityManager.createQuery(select);
-		typedQuery.setFirstResult(offset);
-		typedQuery.setMaxResults(limit);
-		return typedQuery.getResultList().stream().map(e -> convert(e))
+		return tvShowRepository.getMedia(offset, limit).stream().map(e -> convert(e))
 				.collect(Collectors.toList());
 	}
 
