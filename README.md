@@ -1,5 +1,8 @@
 # kodi-catalog-api
 
+[![Build Status](https://travis-ci.org/plec/kodi-catalog-api.svg?branch=master)](https://travis-ci.org/plec/kodi-catalog-api)
+
+
 ## Execute from docker
 ### Build the project
  
