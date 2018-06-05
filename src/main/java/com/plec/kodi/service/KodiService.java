@@ -20,6 +20,7 @@ import com.plec.kodi.repository.EpisodeRepository;
 import com.plec.kodi.repository.GenreRepository;
 import com.plec.kodi.repository.MovieRepository;
 import com.plec.kodi.repository.TvShowRepository;
+import com.plec.kodi.utils.Constants;
 
 
 @Service
@@ -72,25 +73,15 @@ public class KodiService {
 	}
 	
 	public List<Movie> getPaginatedMovie(int offset, int limit, String order) {
-		String orderBy = "title";
-		if (order.equalsIgnoreCase("dateAdded")) {
-			orderBy = "dateAdded";
-		}
-		return movieRepository.getMedia(offset, limit, orderBy).stream().map(e -> KodiMediaConverter.convert(e))
+		return movieRepository.getMedia(offset, limit, getOrder(order)).stream().map(e -> KodiMediaConverter.convert(e))
 				.collect(Collectors.toList());
 	}
 	
 	public List<TvShow> getPaginatedTvShow(int offset, int limit, String order) {
-		String orderBy = "title";
-		if (order.equalsIgnoreCase("dateAdded")) {
-			orderBy = "dateAdded";
-		}
-		return tvShowRepository.getMedia(offset, limit, orderBy).stream().map(e -> KodiMediaConverter.convert(e))
+		return tvShowRepository.getMedia(offset, limit, getOrder(order)).stream().map(e -> KodiMediaConverter.convert(e))
 				.collect(Collectors.toList());
 	}
-
-
-	
+		
 	public List<Movie> findMovieByName(String name) {
 		return movieRepository.findByNameLikeCaseInsensitive("%"+name+"%").stream().map(e -> KodiMediaConverter.convert(e))
 				.collect(Collectors.toList());
@@ -110,6 +101,12 @@ public class KodiService {
 				.collect(Collectors.toList());
 	}
 
+	public TvShow getTvShowById(long id) {
+		return KodiMediaConverter.convert(tvShowRepository.findById(id).get());
+	}
+	public Movie getMovieById(long id) {
+		return KodiMediaConverter.convert(movieRepository.findById(id).get());
+	}
 	
 	public List<Genre> findAllGenre() {
 		return StreamSupport.stream(genreRepository.findAll().spliterator(), false).map(g -> KodiMediaConverter.convert(g))
@@ -117,6 +114,14 @@ public class KodiService {
 	}	
 	public List<Episode> findEpisodesFromTvShow(long idShow) {
 		return episodeRepository.findByTvShow(idShow).stream().map(e -> KodiMediaConverter.convert(e)).collect(Collectors.toList());
+	}
+
+	private String getOrder(String order) {
+		String orderBy = Constants.ORDER_TITLE;
+		if (order.equalsIgnoreCase(Constants.ORDER_DATE)) {
+			orderBy = Constants.ORDER_DATE;
+		}
+		return orderBy;
 	}
 
 }

@@ -52,7 +52,12 @@ public class KodiTvShowController {
 	public List<TvShow> getTvShowsPaginated(@PathVariable int offset, @PathVariable int limit) {
 		return getTvShowsPaginated(offset, limit, "title");
 	}
-	
+
+	@GetMapping("/tvshows/{id}")
+	public TvShow getTvShowsById(@PathVariable String id) {
+		return kodiService.getTvShowById(Long.parseLong(id));
+	}
+
 	@GetMapping("/tvshows/{offset}/{limit}/{order}")
 	public List<TvShow> getTvShowsPaginated(@PathVariable int offset, @PathVariable int limit, @PathVariable String order) {
 		if (limit > MAX_LIMIT) {

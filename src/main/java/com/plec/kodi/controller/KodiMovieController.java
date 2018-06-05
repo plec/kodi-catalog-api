@@ -62,6 +62,11 @@ public class KodiMovieController {
 		return kodiService.getPaginatedMovie(offset, limit, order);
 	}
 
+	@GetMapping("/movie/{id}")
+	public Movie getMoviesById(@PathVariable String id) {
+		return kodiService.getMovieById(Long.parseLong(id));
+	}
+
 	@GetMapping("/movies/title/{movieName}")
 	public List<Movie> getMoviesByName(@PathVariable String movieName) {
 		return kodiService.findMovieByName(movieName);

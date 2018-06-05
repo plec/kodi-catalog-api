@@ -10,6 +10,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import com.plec.kodi.utils.Constants;
+
 
 public abstract class KodiMediaGenericAbstractDao<E, K> implements KodiMediaGenericDao<E, K> {
 
@@ -23,7 +25,7 @@ public abstract class KodiMediaGenericAbstractDao<E, K> implements KodiMediaGene
 	}
 	@Override
 	public List<E> getMedia(int offset, int limit) {
-		return this.getMedia(offset, limit, "title");
+		return this.getMedia(offset, limit, Constants.ORDER_TITLE);
 	}
 	
 	@Override
@@ -34,7 +36,7 @@ public abstract class KodiMediaGenericAbstractDao<E, K> implements KodiMediaGene
 		CriteriaQuery<E> criteriaQuery = criteriaBuilder.createQuery(entityClass);
 		Root<E> from = criteriaQuery.from(entityClass);
 		CriteriaQuery<E> select = criteriaQuery.select(from);
-		if (order.equals("dateAdded")) {
+		if (order.equals(Constants.ORDER_DATE)) {
 			select.orderBy(criteriaBuilder.desc(from.get(order)));
 		} else {
 			select.orderBy(criteriaBuilder.asc(from.get(order)));
