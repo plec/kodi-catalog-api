@@ -7,8 +7,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.plec.kodi.domain.Episode;
 import com.plec.kodi.domain.Genre;
-import com.plec.kodi.domain.KodiMedia;
+import com.plec.kodi.domain.Movie;
+import com.plec.kodi.domain.TvShow;
+import com.plec.kodi.entity.EpisodeEntity;
 import com.plec.kodi.entity.GenreEntity;
 import com.plec.kodi.entity.MovieEntity;
 import com.plec.kodi.entity.TvShowEntity;
@@ -22,11 +25,33 @@ public class KodiMediaConverter {
 	private static final String PATTERN_END_XML_IMAGE = "</thumb>";
 	
 	
-	public static KodiMedia convert(MovieEntity me) {
-		return new KodiMedia(me.getTitle(), me.getResume(), extractImageUrl(me.getImage()), Arrays.stream(me.getGenre().split("/")).map(s -> s.trim()).collect(Collectors.toList()), me.getOriginal_title());
+	public static Movie convert(MovieEntity me) {
+		return new Movie(
+				me.getIdMovie(),
+				me.getTitle(),
+				me.getResume(),
+				extractImageUrl(me.getImage()),
+				Arrays.stream(me.getGenre().split("/")).map(s -> s.trim()).collect(Collectors.toList()),
+				me.getOriginal_title(),
+				/*me.getStrPath()*/ "",
+				me.getDateAdded(),
+				/*me.getStrFileName()*/"");
 	}
-	public static KodiMedia convert(TvShowEntity tse) {
-		return new KodiMedia(tse.getTitle(), tse.getResume(), extractImageUrl(tse.getImage()), Arrays.stream(tse.getGenre().split("/")).map(s -> s.trim()).collect(Collectors.toList()), tse.getOriginal_title());
+	public static TvShow convert(TvShowEntity tse) {
+		return new TvShow(
+				tse.getIdShow(),
+				tse.getTitle(),
+				tse.getResume(),
+				extractImageUrl(tse.getImage()),
+				Arrays.stream(tse.getGenre().split("/")).map(s -> s.trim()).collect(Collectors.toList()),
+				tse.getOriginal_title(),
+				/*tse.getStrPath()*/"",
+				tse.getDateAdded(),
+				tse.getTotalSeasons());
+	}
+	public static Episode convert(EpisodeEntity ee) {
+		return new Episode(ee.getIdEpisode(), ee.getIdShow(), ee.getTitle(), ee.getResume(), ee.getStrPath(), ee.getStrFileName(),
+				ee.getSeason(), ee.getEpisode(), ee.getDateAdded());
 	}
 	public static Genre convert(GenreEntity ge) {
 		return new Genre(ge.getId(), ge.getValue());

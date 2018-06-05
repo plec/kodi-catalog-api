@@ -1,21 +1,39 @@
 package com.plec.kodi.domain;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class KodiMedia {
-	public String titre;
-	public String resume;
-	public String image;
-	public List<String> tags;
-	public String titre_original;
 
-	public KodiMedia(String titre, String resume, String image, List<String> tags, String titre_original) {
+	private long id;
+	private String titre;
+	private String resume;
+	private String image;
+	private List<String> tags;
+	private String titre_original;
+	private String strPath;
+	private LocalDateTime dateAdded;
+
+
+	public KodiMedia(long id, String titre, String resume, String image, List<String> tags, String titre_original, String strPath, String dateAdded) {
 		super();
+		this.id = id;
 		this.titre = titre;
 		this.resume = resume;
 		this.image = image;
 		this.tags = tags;
 		this.titre_original = titre_original;
+		this.strPath = strPath;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime dateTime = LocalDateTime.parse(dateAdded, formatter);
+		this.dateAdded = dateTime;
+	}
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
 	}
 	public String getTitre() {
 		return titre;
@@ -47,6 +65,20 @@ public class KodiMedia {
 	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
+	public String getStrPath() {
+		return strPath;
+	}
+	public void setStrPath(String strPath) {
+		this.strPath = strPath;
+	}
+	public LocalDateTime getDateAdded() {
+		return dateAdded;
+	}
+	public void setDateAdded(LocalDateTime dateAdded) {
+		this.dateAdded = dateAdded;
+	}
+
+
 	
 
 }

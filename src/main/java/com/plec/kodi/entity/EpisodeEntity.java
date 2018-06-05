@@ -5,47 +5,51 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity(name="MovieEntity")
-@Table(name="movie_view")
-public class MovieEntity {
-
+@Entity(name="EpisodeEntity")
+@Table(name="episode_view")
+public class EpisodeEntity {
 	@Id
-	@Column(name="idMovie")
-	private long idMovie;
+	@Column(name="idEpisode")
+	private long idEpisode;
 
-	@Column(name="idFile")
-	private long idFile;
-
+	@Column(name="idShow")
+	private long idShow;
+	
 	@Column(name="c00")
 	private String title;
-	
+
 	@Column(name="c01")
 	private String resume;
 
-	@Column(name="c08")
-	private String image;
-
-	@Column(name="c14")
-	private String genre;
-
-	@Column(name="c16")
-	private String original_title;
-	
 	@Column(name="strPath")
 	private String strPath;
 
 	@Column(name="strFileName")
 	private String strFileName;
 
+	@Column(name="c12")
+	private String season;
+
+	@Column(name="c13")
+	private String episode;
+
 	@Column(name="dateAdded")
 	private String dateAdded;
 
-	public long getIdFile() {
-		return idFile;
+	public long getIdEpisode() {
+		return idEpisode;
 	}
 
-	public void setIdFile(long idFile) {
-		this.idFile = idFile;
+	public void setIdEpisode(long idEpisode) {
+		this.idEpisode = idEpisode;
+	}
+
+	public long getIdShow() {
+		return idShow;
+	}
+
+	public void setIdShow(long idShow) {
+		this.idShow = idShow;
 	}
 
 	public String getTitle() {
@@ -64,43 +68,6 @@ public class MovieEntity {
 		this.resume = resume;
 	}
 
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-
-	public String getGenre() {
-		return genre;
-	}
-
-	public void setGenre(String genre) {
-		this.genre = genre;
-	}
-
-	public String getOriginal_title() {
-		return original_title;
-	}
-
-	public void setOriginal_title(String original_title) {
-		this.original_title = original_title;
-	}
-	
-	 public String toString(){
-	        return idFile+" | " + title;
-	    }
-
-	public long getIdMovie() {
-		return idMovie;
-	}
-
-	public void setIdMovie(long idMovie) {
-		this.idMovie = idMovie;
-	}
-
 	public String getStrPath() {
 		return strPath;
 	}
@@ -117,6 +84,22 @@ public class MovieEntity {
 		this.strFileName = strFileName;
 	}
 
+	public String getSeason() {
+		return season;
+	}
+
+	public void setSeason(String season) {
+		this.season = season;
+	}
+
+	public String getEpisode() {
+		return episode;
+	}
+
+	public void setEpisode(String episode) {
+		this.episode = episode;
+	}
+
 	public String getDateAdded() {
 		return dateAdded;
 	}
@@ -126,3 +109,4 @@ public class MovieEntity {
 	}
 
 }
+

@@ -21,19 +21,24 @@ public abstract class KodiMediaGenericAbstractDao<E, K> implements KodiMediaGene
 	public KodiMediaGenericAbstractDao(Class<E> entityClass) {
 		this.entityClass = entityClass;
 	}
-	
 	@Override
 	public List<E> getMedia(int offset, int limit) {
+		return this.getMedia(offset, limit, "title");
+	}
+	
+	@Override
+	public List<E> getMedia(int offset, int limit, String order) {
 		final EntityManagerFactory entityManagerFactory = entityManager.getEntityManagerFactory();
 		final CriteriaBuilder criteriaBuilder = entityManagerFactory.getCriteriaBuilder();
 		
 		CriteriaQuery<E> criteriaQuery = criteriaBuilder.createQuery(entityClass);
 		Root<E> from = criteriaQuery.from(entityClass);
 		CriteriaQuery<E> select = criteriaQuery.select(from);
-		
-		
-		
-		select.orderBy(criteriaBuilder.asc(from.get("title")));
+		if (order.equals("dateAdded")) {
+			select.orderBy(criteriaBuilder.desc(from.get(order)));
+		} else {
+			select.orderBy(criteriaBuilder.asc(from.get(order)));
+		}
 		TypedQuery<E> typedQuery = entityManager.createQuery(select);
 		typedQuery.setFirstResult(offset);
 		typedQuery.setMaxResults(limit);

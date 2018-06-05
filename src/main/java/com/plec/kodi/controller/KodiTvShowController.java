@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.plec.kodi.domain.Episode;
 import com.plec.kodi.domain.KodiMedia;
 import com.plec.kodi.domain.KodiMediaType;
+import com.plec.kodi.domain.TvShow;
 import com.plec.kodi.service.KodiService;
 
 @RestController
@@ -47,7 +49,12 @@ public class KodiTvShowController {
 	}
 
 	@GetMapping("/tvshows/{offset}/{limit}")
-	public List<KodiMedia> getTvShowsPaginated(@PathVariable int offset, @PathVariable int limit) {
+	public List<TvShow> getTvShowsPaginated(@PathVariable int offset, @PathVariable int limit) {
+		return getTvShowsPaginated(offset, limit, "title");
+	}
+	
+	@GetMapping("/tvshows/{offset}/{limit}/{order}")
+	public List<TvShow> getTvShowsPaginated(@PathVariable int offset, @PathVariable int limit, @PathVariable String order) {
 		if (limit > MAX_LIMIT) {
 			limit = DEFAULT_LIMIT;
 		}
@@ -55,16 +62,22 @@ public class KodiTvShowController {
 			return new ArrayList<>();
 		}
 
-		return kodiService.getPaginatedTvShow(offset, limit);
+		return kodiService.getPaginatedTvShow(offset, limit, order);
 	}
 
 	@GetMapping("/tvshows/title/{movieName}")
-	public List<KodiMedia> getMoviesByName(@PathVariable String movieName) {
-		return kodiService.findKodiMediaByName(KodiMediaType.TVSHOW, movieName);
+	public List<TvShow> getTvShowsByName(@PathVariable String movieName) {
+		return kodiService.findTvShowByName(movieName);
 	}
 
 	@GetMapping("/tvshows/genre/{genreName}")
-	public List<KodiMedia> getMoviesByGenre(@PathVariable String genreName) {
-		return kodiService.findKodiMediaByGenre(KodiMediaType.TVSHOW, genreName);
+	public List<TvShow> getTvShowsByGenre(@PathVariable String genreName) {
+		return kodiService.findTvShowByGenre(genreName);
 	}
+
+	@GetMapping("/tvshows/{id}/episodes/")
+	public List<Episode> getEpisodes(@PathVariable String id) {
+		return kodiService.findEpisodesFromTvShow(Long.parseLong(id));
+	}
+
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.plec.kodi.domain.Genre;
 import com.plec.kodi.domain.KodiMedia;
 import com.plec.kodi.domain.KodiMediaType;
+import com.plec.kodi.domain.Movie;
 import com.plec.kodi.service.KodiService;
 
 @RestController
@@ -44,7 +45,13 @@ public class KodiMovieController {
 	}
 
 	@GetMapping("/movies/{offset}/{limit}")
-	public List<KodiMedia> getMoviesPaginated(@PathVariable int offset, @PathVariable int limit) {
+	public List<Movie> getMoviesPaginated(@PathVariable int offset, @PathVariable int limit) {
+		
+		return getMoviesPaginated(offset, limit, "title");
+	}
+	
+	@GetMapping("/movies/{offset}/{limit}/{order}")
+	public List<Movie> getMoviesPaginated(@PathVariable int offset, @PathVariable int limit, @PathVariable String order) {
 		if (limit > MAX_LIMIT) {
 			limit = DEFAULT_LIMIT;
 		}
@@ -52,17 +59,17 @@ public class KodiMovieController {
 			return new ArrayList<>();
 		}
 
-		return kodiService.getPaginatedMovie(offset, limit);
+		return kodiService.getPaginatedMovie(offset, limit, order);
 	}
 
 	@GetMapping("/movies/title/{movieName}")
-	public List<KodiMedia> getMoviesByName(@PathVariable String movieName) {
-		return kodiService.findKodiMediaByName(KodiMediaType.MOVIE, movieName);
+	public List<Movie> getMoviesByName(@PathVariable String movieName) {
+		return kodiService.findMovieByName(movieName);
 	}
 
 	@GetMapping("/movies/genre/{genreName}")
-	public List<KodiMedia> getMoviesByGenre(@PathVariable String genreName) {
-		return kodiService.findKodiMediaByGenre(KodiMediaType.MOVIE, genreName);
+	public List<Movie> getMoviesByGenre(@PathVariable String genreName) {
+		return kodiService.findMovieByGenre(genreName);
 	}
 
 	@GetMapping("/genres")

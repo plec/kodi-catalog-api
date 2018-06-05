@@ -1,0 +1,42 @@
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.1.47:3307/MyVideos107?useSSL=false
+    username: kodi
+    password: kodi
+    driver-class-name: com.mysql.jdbc.Driver
+    initialization-mode: never
+    hikari:
+      minimumIdle: 0
+      idleTimeout: 30000
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    show-sql: true
+
+    hibernate:
+      ddl-auto: none
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          # This 'Demo:' is the id used inside the redirect-uri-template and must be the same as your realm
+#          kodi-api: 
+#            client-id: kodi-api
+#            client-secret: ad7842a1-98b8-4d25-9394-81d355cbddb2
+#            client-name: kodi-api
+#            provider: keycloak
+#            scope: openid, profile
+#            redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            authorization-grant-type: authorization_code
+#        provider:
+#          keycloak:
+#            token-uri: http://192.168.1.47:8180/auth/realms/pierrotplec/protocol/openid-connect/token
+#            authorization-uri: http://192.168.1.47:8180/auth/realms/pierrotplec/protocol/openid-connect/auth
+#            user-info-uri: http://192.168.1.47:8180/auth/realms/pierrotplec/protocol/openid-connect/userinfo
+#            jwk-set-uri: http://192.168.1.47:8180/auth/realms/pierrotplec/protocol/openid-connect/certs
+#            user-name-attribute: preferred_username

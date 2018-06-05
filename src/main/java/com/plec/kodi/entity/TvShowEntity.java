@@ -6,8 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity(name="TvShowEntity")
-@Table(name="tvshow")
-public class TvShowEntity extends KodiEntity {
+@Table(name="tvshow_view")
+public class TvShowEntity {
 
 	@Id
 	@Column(name="idShow")
@@ -27,6 +27,15 @@ public class TvShowEntity extends KodiEntity {
 
 	@Column(name="c09")
 	private String original_title;
+
+	@Column(name="strPath")
+	private String strPath;
+
+	@Column(name="dateAdded")
+	private String dateAdded;
+
+	@Column(name="totalSeasons")
+	private long totalSeasons;
 
 	public long getIdShow() {
 		return idShow;
@@ -79,4 +88,28 @@ public class TvShowEntity extends KodiEntity {
 	 public String toString(){
 	        return idShow + " | " + title;
 	    }
+
+	public String getStrPath() {
+		return strPath;
+	}
+
+	public void setStrPath(String strPath) {
+		this.strPath = strPath;
+	}
+
+	public String getDateAdded() {
+		return dateAdded;
+	}
+
+	public void setDateAdded(String dateAdded) {
+		this.dateAdded = dateAdded;
+	}
+
+	public long getTotalSeasons() {
+		return totalSeasons;
+	}
+
+	public void setTotalSeasons(long totalSeasons) {
+		this.totalSeasons = totalSeasons;
+	}
 }
