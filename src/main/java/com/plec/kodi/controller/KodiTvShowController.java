@@ -1,7 +1,9 @@
 package com.plec.kodi.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +17,7 @@ import com.plec.kodi.domain.Episode;
 import com.plec.kodi.domain.KodiMedia;
 import com.plec.kodi.domain.KodiMediaType;
 import com.plec.kodi.domain.TvShow;
+import com.plec.kodi.domain.TvShowDetails;
 import com.plec.kodi.service.KodiService;
 
 @RestController
@@ -65,8 +68,20 @@ public class KodiTvShowController {
 	}
 
 	@GetMapping("/tvshows/{id}")
-	public TvShow getTvShowsById(@PathVariable String id) {
-		return kodiService.getTvShowById(Long.parseLong(id));
+	public TvShowDetails getTvShowsById(@PathVariable String id) {
+		TvShowDetails details = new TvShowDetails(kodiService.getTvShowById(Long.parseLong(id)));
+		Map<String, List<Episode>> episodesSaison = new HashMap<>();
+		List<Episode> episodesList = kodiService.findEpisodesFromTvShow(Long.parseLong(id));
+		for (Episode e : episodesList) {
+			if (episodesSaison.get(e.getSeason()) == null) {
+				episodesSaison.put(e.getSeason(), new ArrayList<>());
+			}
+			episodesSaison.get(e.getSeason()).add(e);			
+		}
+		details.setSeasons(episodesSaison.keySet());
+		details.setEpisodes(episodesSaison);
+		details.setTotalEpisodes(episodesList.size());
+		return details;
 	}
 
 	@GetMapping("/tvshows/{offset}/{limit}/{order}")
@@ -113,11 +128,6 @@ public class KodiTvShowController {
 			limit = DEFAULT_LIMIT;
 		}
 		return kodiService.findTvShow(genreName, titleName, offset, limit, order);
-	}
-
-	@GetMapping("/tvshows/{id}/episodes/")
-	public List<Episode> getEpisodes(@PathVariable String id) {
-		return kodiService.findEpisodesFromTvShow(Long.parseLong(id));
 	}
 
 }

@@ -50,7 +50,7 @@ public class KodiMediaConverter {
 				tse.getTotalSeasons());
 	}
 	public static Episode convert(EpisodeEntity ee) {
-		return new Episode(ee.getIdEpisode(), ee.getIdShow(), ee.getTitle(), ee.getResume(), ee.getStrPath(), ee.getStrFileName(),
+		return new Episode(ee.getIdEpisode(), ee.getIdShow(), ee.getTitle(), ee.getResume(), /*ee.getStrPath()*/"", /*ee.getStrFileName()*/"",
 				ee.getSeason(), ee.getEpisode(), ee.getDateAdded());
 	}
 	public static Genre convert(GenreEntity ge) {

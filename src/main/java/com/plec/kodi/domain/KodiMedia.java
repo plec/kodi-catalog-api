@@ -15,7 +15,17 @@ public class KodiMedia {
 	private String strPath;
 	private LocalDateTime dateAdded;
 
-
+	public KodiMedia(long id, String titre, String resume, String image, List<String> tags, String titre_original, String strPath, LocalDateTime dateAdded) {
+		super();
+		this.id = id;
+		this.titre = titre;
+		this.resume = resume;
+		this.image = image;
+		this.tags = tags;
+		this.titre_original = titre_original;
+		this.strPath = strPath;
+		this.dateAdded = dateAdded;
+	}
 	public KodiMedia(long id, String titre, String resume, String image, List<String> tags, String titre_original, String strPath, String dateAdded) {
 		super();
 		this.id = id;
