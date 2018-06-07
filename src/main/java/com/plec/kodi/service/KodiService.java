@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,11 @@ import com.plec.kodi.repository.MovieRepository;
 import com.plec.kodi.repository.TvShowRepository;
 import com.plec.kodi.utils.Constants;
 
-
 @Service
 public class KodiService {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(KodiService.class);
 
-	
 	private MovieRepository movieRepository;
 
 	private GenreRepository genreRepository;
@@ -37,9 +36,9 @@ public class KodiService {
 
 	private EpisodeRepository episodeRepository;
 
-
 	@Autowired
-	public KodiService(MovieRepository movieRepository, GenreRepository genreRepository, TvShowRepository tvShowRepository, EpisodeRepository episodeRepository) {
+	public KodiService(MovieRepository movieRepository, GenreRepository genreRepository,
+			TvShowRepository tvShowRepository, EpisodeRepository episodeRepository) {
 		super();
 		this.movieRepository = movieRepository;
 		this.genreRepository = genreRepository;
@@ -49,71 +48,116 @@ public class KodiService {
 
 	public long countMedia(KodiMediaType mediaType) {
 		switch (mediaType) {
-			case MOVIE:
-				return movieRepository.count();
-			case TVSHOW:
-				return tvShowRepository.count();
-			default:
-				throw new RuntimeException("MediaType " + mediaType + "is not supported");
+		case MOVIE:
+			return movieRepository.count();
+		case TVSHOW:
+			return tvShowRepository.count();
+		default:
+			throw new RuntimeException("MediaType " + mediaType + "is not supported");
 		}
 	}
 
 	public List<KodiMedia> getMedia(KodiMediaType mediaType) {
 		LOGGER.debug("get media : " + mediaType);
 		switch (mediaType) {
-			case MOVIE:
-				return StreamSupport.stream(movieRepository.findAll().spliterator(), false).map(e -> KodiMediaConverter.convert(e))
-						.collect(Collectors.toList());
-			case TVSHOW:
-				return StreamSupport.stream(tvShowRepository.findAll().spliterator(), false).map(e -> KodiMediaConverter.convert(e))
-						.collect(Collectors.toList());
-			default:
-				throw new RuntimeException("MediaType " + mediaType + "is not supported");
+		case MOVIE:
+			return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
+					.map(e -> KodiMediaConverter.convert(e)).collect(Collectors.toList());
+		case TVSHOW:
+			return StreamSupport.stream(tvShowRepository.findAll().spliterator(), false)
+					.map(e -> KodiMediaConverter.convert(e)).collect(Collectors.toList());
+		default:
+			throw new RuntimeException("MediaType " + mediaType + "is not supported");
 		}
 	}
-	
+
 	public List<Movie> getPaginatedMovie(int offset, int limit, String order) {
-		return movieRepository.getMedia(offset, limit, getOrder(order)).stream().map(e -> KodiMediaConverter.convert(e))
+		return movieRepository.getMedia(null, null, offset, limit, getOrder(order)).stream().map(e -> KodiMediaConverter.convert(e))
 				.collect(Collectors.toList());
 	}
-	
+
 	public List<TvShow> getPaginatedTvShow(int offset, int limit, String order) {
-		return tvShowRepository.getMedia(offset, limit, getOrder(order)).stream().map(e -> KodiMediaConverter.convert(e))
-				.collect(Collectors.toList());
+		return tvShowRepository.getMedia(null, null, offset, limit, getOrder(order)).stream()
+				.map(e -> KodiMediaConverter.convert(e)).collect(Collectors.toList());
 	}
-		
+
 	public List<Movie> findMovieByName(String name) {
-		return movieRepository.findByNameLikeCaseInsensitive("%"+name+"%").stream().map(e -> KodiMediaConverter.convert(e))
-				.collect(Collectors.toList());
+		return movieRepository.findByNameLikeCaseInsensitive("%" + name + "%").stream()
+				.map(e -> KodiMediaConverter.convert(e)).collect(Collectors.toList());
 	}
 
 	public List<TvShow> findTvShowByName(String name) {
-		return tvShowRepository.findByNameLikeCaseInsensitive("%"+name+"%").stream().map(e -> KodiMediaConverter.convert(e))
-				.collect(Collectors.toList());
+		return tvShowRepository.findByNameLikeCaseInsensitive("%" + name + "%").stream()
+				.map(e -> KodiMediaConverter.convert(e)).collect(Collectors.toList());
 	}
 
-	public List<Movie> findMovieByGenre(String genre) {
-		return movieRepository.findByGenreLikeCaseInsensitive("%"+genre+"%").stream().map(e -> KodiMediaConverter.convert(e))
-				.collect(Collectors.toList());
+	public List<Movie> findMovie(String genre, String title, int offset, int limit, String order) {
+		String currentGenre = null;
+		String currentTitle = null;
+		if (!StringUtils.isEmpty(genre)) {
+			currentGenre = "%"+genre+"%";
+		}
+		if (!StringUtils.isEmpty(title)) {
+			currentTitle = "%"+title+"%";
+		}
+		return movieRepository.getMedia(currentGenre, currentTitle, offset, limit, order).stream()
+				.map(e -> KodiMediaConverter.convert(e)).collect(Collectors.toList());
 	}
+	
+	public List<TvShow> findTvShow(String genre, String title, int offset, int limit, String order) {
+		String currentGenre = null;
+		String currentTitle = null;
+		if (!StringUtils.isEmpty(genre)) {
+			currentGenre = "%"+genre+"%";
+		}
+		if (!StringUtils.isEmpty(title)) {
+			currentTitle = "%"+title+"%";
+		}
+		return tvShowRepository.getMedia(currentGenre, currentTitle,offset, limit, order).stream()
+				.map(e -> KodiMediaConverter.convert(e)).collect(Collectors.toList());
+	}
+
 	public List<TvShow> findTvShowByGenre(String genre) {
-		return tvShowRepository.findByGenreLikeCaseInsensitive("%"+genre+"%").stream().map(e -> KodiMediaConverter.convert(e))
-				.collect(Collectors.toList());
+		return tvShowRepository.findByGenreLikeCaseInsensitive("%" + genre + "%").stream()
+				.map(e -> KodiMediaConverter.convert(e)).collect(Collectors.toList());
 	}
 
 	public TvShow getTvShowById(long id) {
 		return KodiMediaConverter.convert(tvShowRepository.findById(id).get());
 	}
+
 	public Movie getMovieById(long id) {
 		return KodiMediaConverter.convert(movieRepository.findById(id).get());
 	}
-	
+
 	public List<Genre> findAllGenre() {
-		return StreamSupport.stream(genreRepository.findAll().spliterator(), false).map(g -> KodiMediaConverter.convert(g))
-				.collect(Collectors.toList());
-	}	
+		return StreamSupport.stream(genreRepository.findAll().spliterator(), false)
+				.map(g -> KodiMediaConverter.convert(g)).collect(Collectors.toList());
+	}
+
 	public List<Episode> findEpisodesFromTvShow(long idShow) {
-		return episodeRepository.findByTvShow(idShow).stream().map(e -> KodiMediaConverter.convert(e)).collect(Collectors.toList());
+		return episodeRepository.findByTvShow(idShow).stream().map(e -> KodiMediaConverter.convert(e))
+				.collect(Collectors.toList());
+	}
+
+	public long countMedia(KodiMediaType mediaType, String genre, String title) {
+		String currentGenre = null;
+		String currentTitle = null;
+		if (!StringUtils.isEmpty(genre)) {
+			currentGenre = "%"+genre+"%";
+		}
+		if (!StringUtils.isEmpty(title)) {
+			currentTitle = "%"+title+"%";
+		}
+
+		switch (mediaType) {
+		case MOVIE:
+			return movieRepository.countMedia(currentGenre, currentTitle);
+		case TVSHOW:
+			return tvShowRepository.countMedia(currentGenre, currentTitle);
+		default:
+			throw new RuntimeException("MediaType " + mediaType + "is not supported");
+		}
 	}
 
 	private String getOrder(String order) {

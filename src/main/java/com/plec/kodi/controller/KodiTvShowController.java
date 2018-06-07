@@ -35,8 +35,6 @@ public class KodiTvShowController {
 	}
 
 
-
-
 	@GetMapping("/tvshows")
 	public List<KodiMedia> getMovies() {
 
@@ -47,6 +45,19 @@ public class KodiTvShowController {
 	public long countMovies() {
 		return kodiService.countMedia(KodiMediaType.TVSHOW);
 	}
+	@GetMapping("/tvshows/count/genre/{genreName}")
+	public long countMoviesByGenre(@PathVariable String genreName) {
+		return kodiService.countMedia(KodiMediaType.TVSHOW, genreName, null);
+	}
+	@GetMapping("/tvshows/count/title/{titleName}")
+	public long countMoviesByTitle(@PathVariable String titleName) {
+		return kodiService.countMedia(KodiMediaType.TVSHOW, null, titleName);
+	}
+	@GetMapping("/tvshows/count/genre/{genreName}/title/{titleName}")
+	public long countMoviesByGenreOrTitle(@PathVariable String genreName, @PathVariable String titleName) {
+		return kodiService.countMedia(KodiMediaType.TVSHOW, genreName, titleName);
+	}
+
 
 	@GetMapping("/tvshows/{offset}/{limit}")
 	public List<TvShow> getTvShowsPaginated(@PathVariable int offset, @PathVariable int limit) {
@@ -78,6 +89,30 @@ public class KodiTvShowController {
 	@GetMapping("/tvshows/genre/{genreName}")
 	public List<TvShow> getTvShowsByGenre(@PathVariable String genreName) {
 		return kodiService.findTvShowByGenre(genreName);
+	}
+	
+	@GetMapping("/tvshows/genre/{genreName}/{offset}/{limit}/{order}")
+	public List<TvShow> getTvshowByGenre(@PathVariable String genreName, @PathVariable int offset, @PathVariable int limit, @PathVariable String order) {
+		if (limit > MAX_LIMIT) {
+			limit = DEFAULT_LIMIT;
+		}
+		return kodiService.findTvShow(genreName, null, offset, limit, order);
+	}
+	
+	@GetMapping("/tvshows/title/{titleName}/{offset}/{limit}/{order}")
+	public List<TvShow> getTvshowByTitle(@PathVariable String titleName, @PathVariable int offset, @PathVariable int limit, @PathVariable String order) {
+		if (limit > MAX_LIMIT) {
+			limit = DEFAULT_LIMIT;
+		}
+		return kodiService.findTvShow(null, titleName, offset, limit, order);
+	}
+	
+	@GetMapping("/tvshows/genre/{genreName}/title/{titleName}/{offset}/{limit}/{order}")
+	public List<TvShow> getTvshowByGenreAndTitle(@PathVariable String genreName, @PathVariable String titleName, @PathVariable int offset, @PathVariable int limit, @PathVariable String order) {
+		if (limit > MAX_LIMIT) {
+			limit = DEFAULT_LIMIT;
+		}
+		return kodiService.findTvShow(genreName, titleName, offset, limit, order);
 	}
 
 	@GetMapping("/tvshows/{id}/episodes/")
