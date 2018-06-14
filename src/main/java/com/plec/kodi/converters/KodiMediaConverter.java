@@ -26,6 +26,7 @@ public class KodiMediaConverter {
 	
 	
 	public static Movie convert(MovieEntity me) {
+		String pathFile = StringUtils.remove(me.getStrPath(),"nfs://192.168.1.47/volume1/video");
 		return new Movie(
 				me.getIdMovie(),
 				me.getTitle(),
@@ -33,7 +34,7 @@ public class KodiMediaConverter {
 				extractImageUrl(me.getImage()),
 				Arrays.stream(me.getGenre().split("/")).map(s -> s.trim()).collect(Collectors.toList()),
 				me.getOriginal_title(),
-				/*me.getStrPath()*/ "",
+				/*me.getStrPath()*/ pathFile + me.getStrFileName(),
 				me.getDateAdded(),
 				/*me.getStrFileName()*/"");
 	}

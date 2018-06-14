@@ -19,7 +19,7 @@ import com.plec.kodi.service.KodiService;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(methods = RequestMethod.GET)
+@CrossOrigin(methods = RequestMethod.GET, allowedHeaders= {"Authorization", "Access-Control-Allow-Headers", "*"})
 public class KodiMovieController {
 
 	private static final int MAX_LIMIT = 50;

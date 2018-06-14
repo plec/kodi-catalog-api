@@ -20,6 +20,27 @@ spring:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
+keycloak:
+  enabled: true
+  realm: pierrotplec
+#  auth-server-url: https://auth.pierrotplec.synology.me/auth
+#  auth-server-url: http://192.168.1.47:8180/auth
+  auth-server-url: http://auth.pierrotplec.synology.me/auth
+  resource: kodi-api
+  bearer-only: true
+#  ssl-required: external
+  ssl-required: none
+  principal-attribute: subject
+  use-resource-role-mappings: true
+  credentials:
+    secret: ad7842a1-98b8-4d25-9394-81d355cbddb2
+  securityConstraints:
+    - authRoles: ["view-profile"]
+      securityCollections:
+        - name: API
+          patterns: ['/*']
+
+
 #  security:
 #    oauth2:
 #      client:
