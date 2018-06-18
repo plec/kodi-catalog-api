@@ -50,15 +50,15 @@ public class KodiTvShowController {
 	}
 	@GetMapping("/tvshows/count/genre/{genreName}")
 	public long countMoviesByGenre(@PathVariable String genreName) {
-		return kodiService.countMedia(KodiMediaType.TVSHOW, genreName, null);
+		return kodiService.countMedia(KodiMediaType.TVSHOW, genreName, null, null);
 	}
 	@GetMapping("/tvshows/count/title/{titleName}")
 	public long countMoviesByTitle(@PathVariable String titleName) {
-		return kodiService.countMedia(KodiMediaType.TVSHOW, null, titleName);
+		return kodiService.countMedia(KodiMediaType.TVSHOW, null, titleName, null);
 	}
 	@GetMapping("/tvshows/count/genre/{genreName}/title/{titleName}")
 	public long countMoviesByGenreOrTitle(@PathVariable String genreName, @PathVariable String titleName) {
-		return kodiService.countMedia(KodiMediaType.TVSHOW, genreName, titleName);
+		return kodiService.countMedia(KodiMediaType.TVSHOW, genreName, titleName, null);
 	}
 
 

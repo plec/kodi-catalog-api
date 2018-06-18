@@ -23,6 +23,9 @@ public abstract class KodiMediaGenericAbstractDao<E, K> implements KodiMediaGene
 	private static final String ENTITY_TITLE_FIELD = "title";
 
 	private static final String ENTITY_GENRE_FIELD = "genre";
+	
+	private static final String ENTITY_FORMAT_FIELD = "strFileName";
+	
 
 	protected Class<E> entityClass; 
 
@@ -34,7 +37,7 @@ public abstract class KodiMediaGenericAbstractDao<E, K> implements KodiMediaGene
 	}
 	
 	@Override
-	public List<E> getMedia(String genre, String title, int offset, int limit, String order) {
+	public List<E> getMedia(String genre, String title, String format, int offset, int limit, String order) {
 		final EntityManagerFactory entityManagerFactory = entityManager.getEntityManagerFactory();
 		final CriteriaBuilder criteriaBuilder = entityManagerFactory.getCriteriaBuilder();
 		
@@ -42,6 +45,7 @@ public abstract class KodiMediaGenericAbstractDao<E, K> implements KodiMediaGene
 		Root<E> from = criteriaQuery.from(entityClass);
 		ParameterExpression<String> genreRestriction = null;
 		ParameterExpression<String> titleRestriction = null;
+		ParameterExpression<String> formatRestriction = null;
 		List<Predicate> predicates = new ArrayList<>();
 		//genre
 		if (!StringUtils.isEmpty(genre)) {
@@ -54,6 +58,13 @@ public abstract class KodiMediaGenericAbstractDao<E, K> implements KodiMediaGene
 			titleRestriction = criteriaBuilder.parameter(String.class);
 			predicates.add(criteriaBuilder.like(from.get(ENTITY_TITLE_FIELD), titleRestriction));
 		}
+		//format
+		if (!StringUtils.isEmpty(format)) {
+			formatRestriction = criteriaBuilder.parameter(String.class);
+			predicates.add(criteriaBuilder.like(from.get(ENTITY_FORMAT_FIELD), formatRestriction));
+		}
+
+		
 		//add the restriction
 		criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
 		
@@ -74,6 +85,10 @@ public abstract class KodiMediaGenericAbstractDao<E, K> implements KodiMediaGene
 		if (titleRestriction != null) {
 			typedQuery.setParameter(titleRestriction, title);
 		}
+		//format
+		if (formatRestriction != null) {
+			typedQuery.setParameter(formatRestriction, format);
+		}
 		
 		typedQuery.setFirstResult(offset);
 		typedQuery.setMaxResults(limit);
@@ -81,12 +96,13 @@ public abstract class KodiMediaGenericAbstractDao<E, K> implements KodiMediaGene
 	}
 	
 	@Override
-	public long countMedia(String genre, String title) {
+	public long countMedia(String genre, String title, String format) {
 		final EntityManagerFactory entityManagerFactory = entityManager.getEntityManagerFactory();
 		final CriteriaBuilder criteriaBuilder = entityManagerFactory.getCriteriaBuilder();
 		
 		ParameterExpression<String> genreRestriction = null;
 		ParameterExpression<String> titleRestriction = null;
+		ParameterExpression<String> formatRestriction = null;
 		
 		List<Predicate> predicates = new ArrayList<>();
 		
@@ -104,6 +120,11 @@ public abstract class KodiMediaGenericAbstractDao<E, K> implements KodiMediaGene
 			titleRestriction = criteriaBuilder.parameter(String.class);
 			predicates.add(criteriaBuilder.like(from.get(ENTITY_TITLE_FIELD), titleRestriction));
 		}		
+		//format
+		if (!StringUtils.isEmpty(format)) {
+			formatRestriction = criteriaBuilder.parameter(String.class);
+			predicates.add(criteriaBuilder.like(from.get(ENTITY_FORMAT_FIELD), formatRestriction));
+		}		
 		
 		//add the restriction
 		countCriteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
@@ -117,6 +138,10 @@ public abstract class KodiMediaGenericAbstractDao<E, K> implements KodiMediaGene
 		//title
 		if (titleRestriction != null) {
 			typedQuery.setParameter(titleRestriction, title);
+		}
+		//format
+		if (formatRestriction != null) {
+			typedQuery.setParameter(formatRestriction, format);
 		}
 		return typedQuery.getSingleResult();
 	}

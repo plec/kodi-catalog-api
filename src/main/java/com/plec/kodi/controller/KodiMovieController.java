@@ -46,17 +46,26 @@ public class KodiMovieController {
 	
 	@GetMapping("/movies/count/genre/{genreName}")
 	public long countMoviesByGenre(@PathVariable String genreName) {
-		return kodiService.countMedia(KodiMediaType.MOVIE, genreName, null);
+		return kodiService.countMedia(KodiMediaType.MOVIE, genreName, null, null);
 	}
 
 	@GetMapping("/movies/count/title/{titleName}")
 	public long countMoviesByTitle(@PathVariable String titleName) {
-		return kodiService.countMedia(KodiMediaType.MOVIE, null, titleName);
+		return kodiService.countMedia(KodiMediaType.MOVIE, null, titleName, null);
+	}
+
+	@GetMapping("/movies/count/format/{format}")
+	public long countMoviesByFormat(@PathVariable String format) {
+		return kodiService.countMedia(KodiMediaType.MOVIE, null, null, format);
 	}
 
 	@GetMapping("/movies/count/genre/{genreName}/title/{titleName}")
 	public long countMoviesByGenreOrTitle(@PathVariable String genreName, @PathVariable String titleName) {
-		return kodiService.countMedia(KodiMediaType.MOVIE, genreName, titleName);
+		return kodiService.countMedia(KodiMediaType.MOVIE, genreName, titleName, null);
+	}
+	@GetMapping("/movies/count/genre/{genreName}/title/{titleName}/format/{format}")
+	public long countMoviesByGenreOrTitleOrFormat(@PathVariable String genreName, @PathVariable String titleName, @PathVariable String format) {
+		return kodiService.countMedia(KodiMediaType.MOVIE, genreName, titleName, format);
 	}
 
 	@GetMapping("/movies/{offset}/{limit}")
@@ -92,7 +101,7 @@ public class KodiMovieController {
 		if (limit > MAX_LIMIT) {
 			limit = DEFAULT_LIMIT;
 		}
-		return kodiService.findMovie(genreName, null, offset, limit, order);
+		return kodiService.findMovie(genreName, null, null, offset, limit, order);
 	}
 
 	@GetMapping("/movies/title/{titleName}/{offset}/{limit}/{order}")
@@ -100,7 +109,7 @@ public class KodiMovieController {
 		if (limit > MAX_LIMIT) {
 			limit = DEFAULT_LIMIT;
 		}
-		return kodiService.findMovie(null, titleName, offset, limit, order);
+		return kodiService.findMovie(null, titleName, null, offset, limit, order);
 	}
 
 	@GetMapping("/movies/genre/{genreName}/title/{titleName}/{offset}/{limit}/{order}")
@@ -108,7 +117,15 @@ public class KodiMovieController {
 		if (limit > MAX_LIMIT) {
 			limit = DEFAULT_LIMIT;
 		}
-		return kodiService.findMovie(genreName, titleName, offset, limit, order);
+		return kodiService.findMovie(genreName, titleName, null, offset, limit, order);
+	}
+
+	@GetMapping("/movies/format/{format}/{offset}/{limit}/{order}")
+	public List<Movie> getMoviesByFormat(@PathVariable String format, @PathVariable int offset, @PathVariable int limit, @PathVariable String order) {
+		if (limit > MAX_LIMIT) {
+			limit = DEFAULT_LIMIT;
+		}
+		return kodiService.findMovie(null, null, format, offset, limit, order);
 	}
 
 	@GetMapping("/genres")

@@ -72,12 +72,12 @@ public class KodiService {
 	}
 
 	public List<Movie> getPaginatedMovie(int offset, int limit, String order) {
-		return movieRepository.getMedia(null, null, offset, limit, getOrder(order)).stream().map(e -> KodiMediaConverter.convert(e))
+		return movieRepository.getMedia(null, null, null, offset, limit, getOrder(order)).stream().map(e -> KodiMediaConverter.convert(e))
 				.collect(Collectors.toList());
 	}
 
 	public List<TvShow> getPaginatedTvShow(int offset, int limit, String order) {
-		return tvShowRepository.getMedia(null, null, offset, limit, getOrder(order)).stream()
+		return tvShowRepository.getMedia(null, null, null, offset, limit, getOrder(order)).stream()
 				.map(e -> KodiMediaConverter.convert(e)).collect(Collectors.toList());
 	}
 
@@ -91,18 +91,23 @@ public class KodiService {
 				.map(e -> KodiMediaConverter.convert(e)).collect(Collectors.toList());
 	}
 
-	public List<Movie> findMovie(String genre, String title, int offset, int limit, String order) {
+	public List<Movie> findMovie(String genre, String title, String format, int offset, int limit, String order) {
 		String currentGenre = null;
 		String currentTitle = null;
+		String currentFormat = null;
 		if (!StringUtils.isEmpty(genre)) {
 			currentGenre = "%"+genre+"%";
 		}
 		if (!StringUtils.isEmpty(title)) {
 			currentTitle = "%"+title+"%";
 		}
-		return movieRepository.getMedia(currentGenre, currentTitle, offset, limit, order).stream()
+		if (!StringUtils.isEmpty(format)) {
+			currentFormat = "%"+format;
+		}
+		return movieRepository.getMedia(currentGenre, currentTitle, currentFormat, offset, limit, order).stream()
 				.map(e -> KodiMediaConverter.convert(e)).collect(Collectors.toList());
 	}
+	
 	
 	public List<TvShow> findTvShow(String genre, String title, int offset, int limit, String order) {
 		String currentGenre = null;
@@ -113,7 +118,7 @@ public class KodiService {
 		if (!StringUtils.isEmpty(title)) {
 			currentTitle = "%"+title+"%";
 		}
-		return tvShowRepository.getMedia(currentGenre, currentTitle,offset, limit, order).stream()
+		return tvShowRepository.getMedia(currentGenre, currentTitle, null, offset, limit, order).stream()
 				.map(e -> KodiMediaConverter.convert(e)).collect(Collectors.toList());
 	}
 
@@ -140,21 +145,25 @@ public class KodiService {
 				.collect(Collectors.toList());
 	}
 
-	public long countMedia(KodiMediaType mediaType, String genre, String title) {
+	public long countMedia(KodiMediaType mediaType, String genre, String title, String format) {
 		String currentGenre = null;
 		String currentTitle = null;
+		String currentFormat = null;
 		if (!StringUtils.isEmpty(genre)) {
 			currentGenre = "%"+genre+"%";
 		}
 		if (!StringUtils.isEmpty(title)) {
 			currentTitle = "%"+title+"%";
 		}
+		if (!StringUtils.isEmpty(format)) {
+			currentFormat = "%"+format;
+		}
 
 		switch (mediaType) {
 		case MOVIE:
-			return movieRepository.countMedia(currentGenre, currentTitle);
+			return movieRepository.countMedia(currentGenre, currentTitle, currentFormat);
 		case TVSHOW:
-			return tvShowRepository.countMedia(currentGenre, currentTitle);
+			return tvShowRepository.countMedia(currentGenre, currentTitle, null);
 		default:
 			throw new RuntimeException("MediaType " + mediaType + "is not supported");
 		}
